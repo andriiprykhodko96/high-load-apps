@@ -6,7 +6,7 @@ conn = psycopg2.connect(
     host="localhost",
     database="lab2",
     user="postgres",
-    password="7847")
+    password="1234")
 
 def create_table():
     cursor = conn.cursor()
@@ -59,7 +59,7 @@ def r_level():
             host="localhost",
             database="lab2",
             user="postgres",
-            password="7847")
+            password="1234")
         cur = conn.cursor()
         counter = cur.execute("SELECT counter FROM user_counter WHERE user_id = %s FOR UPDATE;", ('3'))
         counter = cur.fetchone()[0]
