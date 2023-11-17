@@ -5,16 +5,19 @@ from time import time
 lock = threading.Lock()
 
 def increment(map, key):
-    for _ in range(10000):
-        value = count.add_and_get(1)
-        map.put(key, value)
+    for _ in range(1000):
+        map.lock(key)
+        try:
+            count = map.get(key)
+            map.put(key, count + 1)
+        finally:
+            map.unlock(key)
 
 
 if name == 'main':
     hz = hazelcast.HazelcastClient()
     map = hz.get_map("my-dist-map").blocking()
-    key = "task_5"
-    count = hz.cp_subsystem.get_atomic_long(key).blocking()
+    key = "task_3"
     map.put(key,0)
     start=time()
     threads =[threading.Thread(target=increment,
@@ -24,4 +27,4 @@ if name == 'main':
     for thread in threads:
         thread.join()
     print("Time: %s seconds" % (time() - start))
-    print(map.get("task_5"))
+    print(map.get("task_3"))
